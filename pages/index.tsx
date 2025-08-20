@@ -11,13 +11,9 @@ const App = ()=>{
   return (
 
     <div>
-      <NavBar />
+
       <LandingPage />
-      <Messaging />
-      <DigitalContract />
-      <RentDue />
-      <RentPayment />
-      
+     
     </div>
   )
   
