@@ -79,7 +79,7 @@ const LandingPage = () => {
         <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="relative h-10 w-10 flex items-center">
             <Image src='/rental_ease_logo.png' alt='logo' fill  className="text-indigo-600 text-3xl mr-2" />
-            <span className="text-xl ml-12 font-bold text-indigo-800">RentalEase</span>
+            <span className="text-xl ml-12 font-bold text-indigo-800">Rentalora</span>
           </div>
           <div className="hidden md:flex gap-6">
             <button onClick={()=>scrollToSection("features")} className="text-gray-600 hover:text-indigo-600">Features</button>
@@ -184,9 +184,9 @@ const LandingPage = () => {
       <div className="py-20 bg-gray-50" id="how-it-works">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">See RentalEase in Action</h2>
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">See Rentalora in Action</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Watch our demo to see how RentalEase can transform your rental management process
+              Watch our demo to see how Rentalora can transform your rental management process
             </p>
           </div>
           
@@ -332,7 +332,7 @@ const LandingPage = () => {
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <TestimonialCard 
-              quote="RentalEase will save me 10+ hours per month on rent collection and paperwork. My tenants love easy payment system."
+              quote="Rentalora will save me 10+ hours per month on rent collection and paperwork. My tenants love easy payment system."
               name="Sarah Johnson"
               role="Property Manager"
               imgSrc="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&h=200&q=80"
@@ -474,7 +474,7 @@ const LandingPage = () => {
       
           
           <div className="border-t border-gray-800 mt-8 pt-8 text-sm text-center">
-            <p>&copy; {new Date().getFullYear()} RentalEase. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} Rentalora. All rights reserved.</p>
           </div>
 
           <ScrollTopButton />
