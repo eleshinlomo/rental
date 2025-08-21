@@ -1,4 +1,4 @@
-import ScrollTopButton from "./components/scrollTopButton"
+import ScrollTopButton from "../components/scrollTopButton"
 
 interface PagesProps {
     children: React.ReactNode

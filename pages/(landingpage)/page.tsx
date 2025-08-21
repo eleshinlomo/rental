@@ -1,8 +1,8 @@
 import { FaHome, FaEnvelope, FaFileSignature, FaBell, FaMoneyBillWave, FaPlay, FaCheck, FaUsers, FaChartLine, FaShieldAlt } from 'react-icons/fa';
 import { MdEvStation, MdOutlineSupportAgent } from 'react-icons/md';
 import { IoMdTime } from 'react-icons/io';
-import ScrollTopButton from '../components/scrollTopButton';
-import { createWaitList, CreateWaitListProps } from '../components/api';
+import ScrollTopButton from '../../components/scrollTopButton';
+import { createWaitList, CreateWaitListProps } from '../../components/api';
 import { useEffect, useState } from 'react';
 import RentPayment from '../(apps)/rentpaymentpage/page';
 import RentDue from '../(apps)/rentduepage/page';
