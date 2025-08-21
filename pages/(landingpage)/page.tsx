@@ -2,8 +2,23 @@ import { FaHome, FaEnvelope, FaFileSignature, FaBell, FaMoneyBillWave, FaPlay, F
 import { MdEvStation, MdOutlineSupportAgent } from 'react-icons/md';
 import { IoMdTime } from 'react-icons/io';
 import ScrollTopButton from '../components/scrollTopButton';
+import { createWaitList, CreateWaitListProps } from '../components/api';
+import { useEffect, useState } from 'react';
+import RentPayment from '../(apps)/rentpaymentpage/page';
+import RentDue from '../(apps)/rentduepage/page';
+import Messaging from '../messagingpage/page';
+import DigitalContract from '../(apps)/digitalcontractpage/page';
+import Image from 'next/image';
+// import rentaleaseVideo from '/videos/rentease_video.mp4'
 
 const LandingPage = () => {
+
+  const [firstname, setFistName] = useState('')
+  const [lastname, setLastname] = useState('')
+  const [email, setEmail] = useState('')
+  const [message, setMessage] = useState('Enter your email below')
+  const [error, setError] = useState('')
+  const [color, setColor] = useState('gray')
 
   const scrollToSection = (id: string)=>{
     const element = document.getElementById(id)
@@ -15,14 +30,56 @@ const LandingPage = () => {
     }
   }
 
+
+
+  const handleCreateWaitlist = async () => {
+  setError('')
+  
+  // Basic validation for empty email
+  if (!email) {
+    setError('Please enter an email')
+    return
+  }
+  
+
+  // Email format validation using regex
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!emailRegex.test(email)) {
+    setError('Please enter a valid email address')
+    return
+  }
+  
+  const payload: CreateWaitListProps = {
+    email
+  }
+  
+  try {
+    const response = await createWaitList(payload)
+    console.log('RESPONSE', response)
+    
+    if (response.ok) {
+      setMessage(response.message)
+      setEmail('')
+      setError('')
+    } else {
+      setError(response.error)
+    }
+  } catch (error) {
+    setError('An unexpected error occurred. Please try again.')
+    console.error('Error creating waitlist:', error)
+  }
+}
+
+  
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Navigation */}
       <nav className="bg-white shadow-sm py-4">
         <div className="container mx-auto px-4 flex justify-between items-center">
-          <div className="flex items-center">
-            <MdEvStation className="text-indigo-600 text-3xl mr-2" />
-            <span className="text-xl font-bold text-indigo-800">RentalEase</span>
+          <div className="relative h-10 w-10 flex items-center">
+            <Image src='/rental_ease_logo.png' alt='logo' fill  className="text-indigo-600 text-3xl mr-2" />
+            <span className="text-xl ml-12 font-bold text-indigo-800">RentalEase</span>
           </div>
           <div className="hidden md:flex gap-6">
             <button onClick={()=>scrollToSection("features")} className="text-gray-600 hover:text-indigo-600">Features</button>
@@ -30,7 +87,9 @@ const LandingPage = () => {
             <button onClick={()=>scrollToSection("testimonials")} className="text-gray-600 hover:text-indigo-600">Testimonials</button>
             <button onClick={()=>scrollToSection("pricing")} className="text-gray-600 hover:text-indigo-600">Pricing</button>
           </div>
-          <button className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow transition-all">
+          <button className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow transition-all"
+           onClick={()=>scrollToSection('waitlist')}
+          >
             Join Waitlist
           </button>
         </div>
@@ -48,10 +107,14 @@ const LandingPage = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 mb-10">
-              <button className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all flex-1">
+              <button className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all flex-1"
+               onClick={()=>scrollToSection('waitlist')}
+              >
                 Get Started - It&apos;s Free
               </button>
-              <button className="border-2 border-indigo-600 text-indigo-600 font-bold py-3 px-6 rounded-lg hover:bg-indigo-50 transition-all flex-1 flex items-center justify-center gap-2">
+              <button className="border-2 border-indigo-600 text-indigo-600 font-bold py-3 px-6 rounded-lg hover:bg-indigo-50 transition-all flex-1 flex items-center justify-center gap-2"
+               onClick={()=>scrollToSection('product-video')}
+              >
                 <FaPlay /> See Demo
               </button>
             </div>
@@ -75,7 +138,7 @@ const LandingPage = () => {
                 />
               </div>
               <div className="text-left">
-                <p className="text-gray-600 text-sm">Trusted by 500+ users</p>
+                <p className="text-gray-600 text-sm">500+ Landlords & Tenants can&apos;t wait</p>
                 <div className="flex items-center gap-1">
                   {[...Array(5)].map((_, i) => (
                     <svg key={i} className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
@@ -90,17 +153,15 @@ const LandingPage = () => {
           
           <div className="lg:w-1/2 relative">
             <div className="relative rounded-xl overflow-hidden shadow-2xl">
-              {/* Placeholder for dashboard image - replace with actual image */}
-              <img 
-                src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&h=600&q=80" 
-                alt="RentalEase Dashboard" 
-                className="w-full h-auto"
-              />
-              <div className="absolute inset-0 bg-indigo-800 bg-opacity-30 flex items-center justify-center">
-                <button className="bg-white text-indigo-600 rounded-full w-16 h-16 flex items-center justify-center hover:scale-110 transition-transform">
-                  <FaPlay className="text-xl" />
-                </button>
-              </div>
+        
+              <video src='/videos/rentease_video2.mp4' className='w-full h-auto' 
+              playsInline
+                  loop 
+                  muted 
+                  controls 
+                  autoPlay
+               />
+    
             </div>
           </div>
         </div>
@@ -125,18 +186,22 @@ const LandingPage = () => {
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-gray-800 mb-4">See RentalEase in Action</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Watch our 2-minute demo to see how RentalEase can transform your rental management process
+              Watch our demo to see how RentalEase can transform your rental management process
             </p>
           </div>
           
-          <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden">
+          <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden" id='product-video'>
             <div className="aspect-w-16 aspect-h-9">
-              {/* Video placeholder - replace with actual video embed */}
+              {/* Product Video*/}
               <div className="w-full h-full bg-gray-200 flex items-center justify-center">
                 <div className="text-center">
-                  <button className="bg-indigo-600 text-white rounded-full w-20 h-20 flex items-center justify-center hover:bg-indigo-700 transition-colors mb-4 mx-auto">
-                    <FaPlay className="text-2xl" />
-                  </button>
+                  <video src='/videos/rentease_video.mp4' className='w-full h-auto' 
+                  playsInline
+                  loop 
+                  muted 
+                  controls 
+                  autoPlay 
+                  />
                   <p className="text-gray-600">Product demo video</p>
                 </div>
               </div>
@@ -267,13 +332,13 @@ const LandingPage = () => {
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <TestimonialCard 
-              quote="RentalEase saved me 10+ hours per month on rent collection and paperwork. My tenants love the easy payment system."
+              quote="RentalEase will save me 10+ hours per month on rent collection and paperwork. My tenants love easy payment system."
               name="Sarah Johnson"
               role="Property Manager"
               imgSrc="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&h=200&q=80"
             />
             <TestimonialCard 
-              quote="As a tenant, I appreciate how transparent and easy the platform is. Paying rent takes seconds and I get instant receipts."
+              quote="As a tenant, I appreciate how transparent and easy the demo platform is. Paying rent takes seconds and I get instant receipts."
               name="Michael Chen"
               role="Tenant"
               imgSrc="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&h=200&q=80"
@@ -300,9 +365,9 @@ const LandingPage = () => {
           
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             <PricingCard 
-              title="Starter"
-              price="$100"
-              period="/month"
+              title="Landlord"
+              price="10%"
+              period="/month(each property)"
               description="Perfect for individual landlords with 1-2 properties"
               features={[
                 "Up to 2 properties",
@@ -315,8 +380,8 @@ const LandingPage = () => {
             />
             <PricingCard 
               title="Professional"
-              price="$200"
-              period="/month"
+              price="8%"
+              period="/month(each property)"
               description="For landlords with multiple properties"
               features={[
                 "Up to 10 properties",
@@ -328,8 +393,8 @@ const LandingPage = () => {
             />
             <PricingCard 
               title="Enterprise"
-              price="$400"
-              period="/month"
+              price="5%"
+              period="/month(each property)"
               description="For property management companies"
               features={[
                 "Up to 30 properties",
@@ -353,7 +418,7 @@ const LandingPage = () => {
           <div className="space-y-6">
             <FAQItem 
               question="Is there a long-term contract?"
-              answer="No, all plans are month-to-month with no long-term commitment. You can cancel anytime."
+              answer="Yes, all plans can be tailored to be either month-to-month or year-to-year. Landlord can choose if lease can be canceled at anytime."
             />
             <FAQItem 
               question="How do tenants pay rent through the platform?"
@@ -365,7 +430,7 @@ const LandingPage = () => {
             />
             <FAQItem 
               question="Can I try before I buy?"
-              answer="Yes! Our Starter plan is free forever with basic features. You can upgrade anytime to access more advanced features."
+              answer="Yes! Our Starter plan is free for 30 days with basic features. You can upgrade anytime to access more advanced features."
             />
           </div>
         </div>
@@ -378,15 +443,22 @@ const LandingPage = () => {
           <p className="text-xl mb-8 max-w-2xl mx-auto">
             Join thousands of landlords and tenants who are already enjoying stress-free property management.
           </p>
-          
-          <div className="max-w-md mx-auto bg-white rounded-lg p-1 shadow-lg">
+          {/* Message */}
+          <p className={`font-extrabold pb-2 text-sm  ${error ? 'text-red-400' : ''}`}>{error ? error : message}</p>
+
+          <div className="max-w-md mx-auto bg-white rounded-lg p-1 shadow-lg" id='waitlist'>
             <div className="flex flex-col sm:flex-row">
               <input 
                 type="email" 
                 placeholder="Enter your email" 
+                value={email}
+                onChange={(e)=>setEmail(e.target.value)}
                 className="flex-grow px-4 py-3 rounded-lg focus:outline-none text-gray-800"
+                required
               />
-              <button className="bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-indigo-800 transition-all whitespace-nowrap">
+              <button className="bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-indigo-800 transition-all whitespace-nowrap"
+               onClick={handleCreateWaitlist}
+              >
                 Join Waitlist
               </button>
             </div>
@@ -404,6 +476,9 @@ const LandingPage = () => {
           <div className="border-t border-gray-800 mt-8 pt-8 text-sm text-center">
             <p>&copy; {new Date().getFullYear()} RentalEase. All rights reserved.</p>
           </div>
+
+          <ScrollTopButton />
+         
         </div>
       
   );
@@ -437,6 +512,8 @@ const TestimonialCard = ({ quote, name, role, imgSrc }: { quote: string, name: s
           </svg>
         ))}
       </div>
+
+      
     </div>
   );
 };
@@ -473,7 +550,7 @@ const PricingCard = ({ title, price, period, description, features, highlighted 
         </ul>
       </div>
 
-      <ScrollTopButton />
+      
     </div>
   );
 };
